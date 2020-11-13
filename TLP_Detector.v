@@ -38,9 +38,9 @@ wire [W-1:0] count;
 reg[1:0] state_reg,state_next;
 reg[159:0] data_reg;
 reg[159:0] data_next;
-reg[9:0] op_reg;
+reg[9:0] op;
 
-reg[159:0] data_out_reg;
+reg[159:0] data_out_logic;
 
 
 always @(posedge clk or negedge reset)
@@ -64,7 +64,7 @@ always @*
 begin
     data_next ={data_in[7:0],data_reg[159:8]};
     // TLP_next = TLP_reg;
-    op_reg = 0;
+    op = 0;
     //enable counter 
     enable = 1;
     reset_counter = 1;
@@ -74,7 +74,7 @@ begin
     TLP_up = 1;
     // 
  
-    data_out_reg = 0;
+    data_out_logic = 0;
     state_next = TLP_start;
     case (state_reg)
     TLP_start:
@@ -120,9 +120,23 @@ begin
     send:
     begin
         TLP_enable = 1;
-        op_reg = dec_out;
-        data_out_reg = data_reg;
-        state_next = TLP_start;
+        op = dec_out;
+        data_out_logic = data_reg;
+        
+         if(datak & (data_in == STP))
+            begin
+                reset_counter = 0;
+                //  counter enable
+                enable = 0;
+                // TLP counter
+                state_next = TLP_frame;
+                
+            end 
+            else begin
+            state_next = TLP_start;
+            
+            end    
+    
     end
     endcase
 end
@@ -130,8 +144,8 @@ end
 assign dec_in = data_reg[31:24];
 // // output logic
 
-assign Data_out =  data_out_reg;
-assign {CplD,Cpl,CfgWr1,CfgRd1,CfgWr0,CfgRd0,IOWr,IORd,MWr,MRd} = op_reg;
+assign Data_out =  data_out_logic;
+assign {CplD,Cpl,CfgWr1,CfgRd1,CfgWr0,CfgRd0,IOWr,IORd,MWr,MRd} = op;
 
 /////////////////////////////////////////////////////////////////////////////
 

@@ -63,7 +63,7 @@ end
 always @*
 begin
     data_next ={data_in[7:0],data_reg[159:8]};
-    // TLP_next = TLP_reg;
+    
     op = 0;
     //enable counter 
     enable = 1;
@@ -83,9 +83,7 @@ begin
         if(datak & (data_in == STP))
             begin
                 reset_counter = 0;
-                //  counter enable
                 enable = 0;
-                // TLP counter
                 state_next = TLP_frame;
                 
             end     
@@ -126,9 +124,9 @@ begin
          if(datak & (data_in == STP))
             begin
                 reset_counter = 0;
-                //  counter enable
+                
                 enable = 0;
-                // TLP counter
+                
                 state_next = TLP_frame;
                 
             end 

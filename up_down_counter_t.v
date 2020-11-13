@@ -39,22 +39,26 @@ begin
     $dumpvars(0,up_down_counter_t);
 
 // test counter up
+repeat(10)@(negedge clk);
+
+
 enable = 1;
 up = 1;
-repeat(10)@(negedge clk);
-
-// test counter down
-enable = 1;
-up = 0;
-repeat(5)@(negedge clk);
-
-// disable counter
+repeat(1)@(negedge clk);
 enable = 0;
-repeat(5)@(negedge clk);
+up = 1;
+// // test counter down
+// enable = 1;
+// up = 0;
+// repeat(5)@(negedge clk);
+
+// // disable counter
+// enable = 0;
+// repeat(5)@(negedge clk);
 
 
-reset = 0;
-repeat(10)@(negedge clk);
+// reset = 0;
+ repeat(10)@(negedge clk);
 
 
 $finish;

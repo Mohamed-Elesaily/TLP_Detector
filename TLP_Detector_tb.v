@@ -307,7 +307,7 @@ end
 
 
 
-//uut instance
+//dut instance
 TLP_Detector TLP_Detector_i(
 .reset		(reset),
 .clk		(clk),
